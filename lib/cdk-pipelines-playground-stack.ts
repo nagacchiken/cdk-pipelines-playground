@@ -17,7 +17,7 @@ export class CdkPipelinesPlaygroundStack extends cdk.Stack {
       "GitHubToken",
       "cdk-pipelines-playground-token"
     );
-    const repo = "kenro-t/cdk-pipelines-playground";
+    const repo = "nagacchiken/cdk-pipelines-playground";
     const branch = "main";
 
     const pipeline = new CodePipeline(this, "Pipeline", {
