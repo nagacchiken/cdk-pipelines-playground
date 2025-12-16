@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
-import { CdkPipelinesPlaygroundV2Stack } from "../lib/cdk-pipelines-playground-stack";
+import { CdkPipelinesPlaygroundStack } from "../lib/cdk-pipelines-playground-stack";
 
 const app = new cdk.App();
-new CdkPipelinesPlaygroundV2Stack(app, "CdkPipelinesPlaygroundV2");
+new CdkPipelinesPlaygroundStack(app, "CdkPipelinesPlayground", {
+  env: {
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: process.env.CDK_DEFAULT_REGION,
+  },
+});
+

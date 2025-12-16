@@ -8,20 +8,20 @@ import {
 import * as sm from "aws-cdk-lib/aws-secretsmanager";
 import { MyAppStage } from "./my-app-stage";
 
-export class CdkPipelinesPlaygroundV2Stack extends cdk.Stack {
+export class CdkPipelinesPlaygroundStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // const githubToken = sm.Secret.fromSecretNameV2(
-    //   this,
-    //   "GitHubToken",
-    //   "cdk-pipelines-playground-token"
-    // );
+    const githubToken = sm.Secret.fromSecretNameV2(
+      this,
+      "GitHubToken",
+      "cdk-pipelines-playground-token"
+    );
 
-    const githubToken = sm.Secret.fromSecretAttributes(this, "GitHubToken", {
-      secretCompleteArn:
-        "arn:aws:secretsmanager:ap-northeast-1:myarn",
-    });
+    // const githubToken = sm.Secret.fromSecretAttributes(this, "GitHubToken", {
+    //   secretCompleteArn:
+    //     "arn:aws:secretsmanager:ap-northeast-1:myarn",
+    // });
 
     const repo = "nagacchiken/cdk-pipelines-playground";
     const branch = "main";
