@@ -5,23 +5,25 @@ import {
   CodePipelineSource,
   ShellStep,
 } from "aws-cdk-lib/pipelines";
-import * as sm from "aws-cdk-lib/aws-secretsmanager";
+// import * as sm from "aws-cdk-lib/aws-secretsmanager";
+import * as ssm from "aws-cdk-lib/aws-ssm"; 
 import { MyAppStage } from "./my-app-stage";
 
 export class CdkPipelinesPlaygroundStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const githubToken = sm.Secret.fromSecretNameV2(
-      this,
-      "GitHubToken",
-      "cdk-pipelines-playground-token"
-    );
+    // const githubToken = sm.Secret.fromSecretNameV2(
+    //   this,
+    //   "GitHubToken",
+    //   "cdk-pipelines-playground-token"
+    // );
 
-    // const githubToken = sm.Secret.fromSecretAttributes(this, "GitHubToken", {
-    //   secretCompleteArn:
-    //     "arn:aws:secretsmanager:ap-northeast-1:myarn",
-    // });
+    // SSMからconnectionArnを取得
+    const connectionArn = ssm.StringParameter.valueForStringParameter(
+      this,
+      "/cdk-pipelines-playground/connection-arn",
+    );
 
     const repo = "nagacchiken/cdk-pipelines-playground";
     const branch = "main";
@@ -29,8 +31,8 @@ export class CdkPipelinesPlaygroundStack extends cdk.Stack {
     const pipeline = new CodePipeline(this, "Pipeline", {
       pipelineName: "cdk-pipelines-playground-pipeline",
       synth: new ShellStep("Synth", {
-        input: CodePipelineSource.gitHub(repo, branch, {
-          authentication: githubToken.secretValueFromJson("github-token"),
+        input: CodePipelineSource.connection(repo, branch, {
+          connectionArn,
         }),
         commands: ["npm ci", "npm run build", "npx cdk synth"],
       }),
